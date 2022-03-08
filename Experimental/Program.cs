@@ -43,7 +43,7 @@
         //
         // to learn more about ingame scripts.
         private bool IsServer = false;
-        private Server server;
+        //private Server server;
         private Connection connection;
         private IMyTextPanel panel;
         private IMyTextPanel panel2;
@@ -52,6 +52,7 @@
         private Vector2 linePosition = new Vector2();
         private readonly MyIni ini = new MyIni();
         private int count = 0;
+        /*
         public Program()
         {
             // The constructor, called only once every session and
@@ -64,7 +65,7 @@
             // It's recommended to set Runtime.UpdateFrequency 
             // here, which will allow your script to run itself without a 
             // timer block.
-
+            
             if (this.ini.TryParse(this.Me.CustomData))
             {
                 if (this.ini.Get("igc", "server").ToBoolean())
@@ -115,7 +116,7 @@
                 this.Log("Connection Configuration Complete");
                 this.Log($" > {this.connection.Tag}");
             }
-
+            
             this.Runtime.UpdateFrequency = UpdateFrequency.Update10 | UpdateFrequency.Update100;
         }
 
@@ -321,6 +322,6 @@
             {
                 this.Error(ex.Message);
             }
-        }
+        }*/
     }
 }
