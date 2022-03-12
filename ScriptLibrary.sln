@@ -67,6 +67,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.IGC.Server", "Common
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.IGC.Connection", "Common.IGC.Connection\Common.IGC.Connection.shproj", "{084AC3B0-66B5-4011-96A2-01DE1736BFDA}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.SubSystem", "Common.SubSystem\Common.SubSystem.shproj", "{7AD398F5-E6E9-48AD-B5B2-9EAADA385314}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common.Ship.Mass\Common.Ship.Mass.projitems*{04680f18-c320-4655-9d28-5d13d1a12363}*SharedItemsImports = 13
@@ -78,9 +80,28 @@ Global
 		Common.Ship\Ship.Common.projitems*{051a3877-eb83-4229-a7a1-929d30def462}*SharedItemsImports = 4
 		Common.Sprite.Helper\Sprite.Helper.projitems*{051a3877-eb83-4229-a7a1-929d30def462}*SharedItemsImports = 4
 		Common.Sprite.ResourceLevel\ResourceLevelSpriteLibrary.projitems*{051a3877-eb83-4229-a7a1-929d30def462}*SharedItemsImports = 4
+		Common.SubSystem\Common.SubSystem.projitems*{051a3877-eb83-4229-a7a1-929d30def462}*SharedItemsImports = 4
 		Common.IGC.Connection\Common.IGC.Connection.projitems*{084ac3b0-66b5-4011-96a2-01de1736bfda}*SharedItemsImports = 13
+		Common.Array.Converter\Common.Array.Converter.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Display.Grid\DisplayGrid.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
 		Common.IGC.Connection\Common.IGC.Connection.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
 		Common.IGC.Server\Common.IGC.Server.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Inventory.GasTanks\Common.Inventory.GasTanks.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Inventory\Inventory.Shared.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Item.Types\Item.Types.Common.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Cargo\Common.Ship.Cargo.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Comms\Common.Ship.Comms.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Controllers\Common.Ship.Controllers.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Docking\Docking.Shared.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Mass\Common.Ship.Mass.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Targeting\Common.Ship.Targeting.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship.Weapons\Common.Ship.Weapons.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Ship\Ship.Common.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Sprite.Helper\Sprite.Helper.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Sprite.ResourceLevel\ResourceLevelSpriteLibrary.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.Sprite.Serializer\SpriteSerializer.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common.SubSystem\Common.SubSystem.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
+		Common\Common.projitems*{22c5a07a-1ba5-430d-92e7-3f1bb8fcd097}*SharedItemsImports = 4
 		Common\Common.projitems*{2320beae-a4b2-4fbb-85d9-f03c5b32edda}*SharedItemsImports = 4
 		Common.Ship.Comms\Common.Ship.Comms.projitems*{26aa9d20-5c99-4e19-aa1b-07a6e69a97cc}*SharedItemsImports = 13
 		Common.Ship.Weapons\Common.Ship.Weapons.projitems*{32017ffd-f50f-4a49-8c3c-77f3ca046955}*SharedItemsImports = 13
@@ -89,6 +110,7 @@ Global
 		Common.Ship.Docking\Docking.Shared.projitems*{3a5d1472-ff5e-4426-8c07-15bab7bfea32}*SharedItemsImports = 4
 		Common.Ship\Ship.Common.projitems*{3a5d1472-ff5e-4426-8c07-15bab7bfea32}*SharedItemsImports = 4
 		Common.Sprite.ResourceLevel\ResourceLevelSpriteLibrary.projitems*{3a5d1472-ff5e-4426-8c07-15bab7bfea32}*SharedItemsImports = 4
+		Common.SubSystem\Common.SubSystem.projitems*{3a5d1472-ff5e-4426-8c07-15bab7bfea32}*SharedItemsImports = 4
 		Common\Common.projitems*{3a5d1472-ff5e-4426-8c07-15bab7bfea32}*SharedItemsImports = 4
 		Common.Display.Grid\DisplayGrid.projitems*{46c74cea-f549-4cbb-bfeb-928c72208c70}*SharedItemsImports = 13
 		Common\Common.projitems*{4f527f62-fcb1-48e3-b565-025a581e887c}*SharedItemsImports = 13
@@ -99,6 +121,7 @@ Global
 		Common.Sprite.Helper\Sprite.Helper.projitems*{61c28446-aecf-40b4-9b3f-5a437aba699a}*SharedItemsImports = 4
 		Common.Inventory\Inventory.Shared.projitems*{663760a0-5107-4aec-a36b-5b7682ef78b3}*SharedItemsImports = 13
 		Common.Ship.Cargo\Common.Ship.Cargo.projitems*{793b6da1-3327-421a-b2bd-d1568371713b}*SharedItemsImports = 13
+		Common.SubSystem\Common.SubSystem.projitems*{7ad398f5-e6e9-48ad-b5b2-9eaada385314}*SharedItemsImports = 13
 		Common.Item.Types\Item.Types.Common.projitems*{7e458d60-e285-4905-a5f3-6da97008a31d}*SharedItemsImports = 13
 		Common.IGC.Server\Common.IGC.Server.projitems*{7e9b0638-2759-400a-8b6d-fe60d36d1134}*SharedItemsImports = 13
 		Common.Sprite.Helper\Sprite.Helper.projitems*{8080963f-1fb8-4a18-bf76-c6d822d3f3cd}*SharedItemsImports = 13
@@ -124,6 +147,7 @@ Global
 		Common.Ship.Mass\Common.Ship.Mass.projitems*{cd5067c8-4a07-4b04-a210-b3da6c28b7ec}*SharedItemsImports = 4
 		Common.Ship.Targeting\Common.Ship.Targeting.projitems*{cd5067c8-4a07-4b04-a210-b3da6c28b7ec}*SharedItemsImports = 4
 		Common.Ship\Ship.Common.projitems*{cd5067c8-4a07-4b04-a210-b3da6c28b7ec}*SharedItemsImports = 4
+		Common.SubSystem\Common.SubSystem.projitems*{cd5067c8-4a07-4b04-a210-b3da6c28b7ec}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
