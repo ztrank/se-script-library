@@ -3,12 +3,12 @@
   <PropertyGroup>
     <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>7ad398f5-e6e9-48ad-b5b2-9eaada385314</SharedGUID>
+    <SharedGUID>ec7d5e22-67d1-4002-81f2-238d0c76ed76</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Common.SubSystem</Import_RootNamespace>
+    <Import_RootNamespace>Common.SubSystem.Targetting</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)SubSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SubSystem.Targetting.cs" />
   </ItemGroup>
 </Project>

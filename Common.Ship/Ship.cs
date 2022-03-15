@@ -25,9 +25,19 @@
         public partial class Ship
         {
             /// <summary>
+            /// INI For the program.
+            /// </summary>
+            private readonly MyIni ini;
+
+            /// <summary>
             /// Gets the terminal blocks.
             /// </summary>
             public List<IMyTerminalBlock> TerminalBlocks { get; } = new List<IMyTerminalBlock>();
+
+            /// <summary>
+            /// Gets the subsystem list.
+            /// </summary>
+            public List<ISubSystem> SubSystems { get; } = new List<ISubSystem>();
 
             /// <summary>
             /// Gets or sets the grid terminal system.
@@ -45,6 +55,11 @@
             public IMyProgrammableBlock Me { get; }
 
             /// <summary>
+            /// Gets the runtime info.
+            /// </summary>
+            public IMyGridProgramRuntimeInfo Runtime { get; }
+
+            /// <summary>
             /// Gets the ship's cube size.
             /// </summary>
             public MyCubeSize ShipType => this.Me.CubeGrid.GridSizeEnum;
@@ -60,15 +75,60 @@
             public Action<string> Error { get; set; }
 
             /// <summary>
+            /// Gets a value indicating whether or not the log messages should be logged.
+            /// </summary>
+            public bool Debug { get; }
+
+            /// <summary>
             /// Initializes the ship.
             /// </summary>
             /// <param name="program">Running Program.</param>
             /// <returns>Initialized Ship.</returns>
-            public Ship(MyGridProgram program)
+            public Ship(MyGridProgram program, MyIni ini, bool debug = false)
             {
                 this.GridTerminalSystem = program.GridTerminalSystem;
                 this.Me = program.Me;
                 this.IGC = program.IGC;
+                this.Runtime = program.Runtime;
+                this.Debug = debug;
+                this.ini = ini;
+            }
+
+            /// <summary>
+            /// Initializes the ship by attaching and initializing all sub systems.
+            /// </summary>
+            /// <returns>Initialized ship.</returns>
+            public Ship Initialize()
+            {
+                foreach(ISubSystem system in this.SubSystems)
+                {
+                    system.Attach(this.GridTerminalSystem, this.Me, this.Runtime, this.IGC, this.ini, this.Log, this.Error, this.Debug);
+                    system.Initialize();
+                }
+
+                return this;
+            }
+
+            /// <summary>
+            /// Reinitializes all subsystems.
+            /// </summary>
+            public void Reinitialize()
+            {
+                foreach(ISubSystem system in this.SubSystems)
+                {
+                    system.Initialize();
+                }
+            }
+
+            /// <summary>
+            /// Builder function for adding subsystems.
+            /// </summary>
+            /// <param name="subSystem">Subsytem to add.</param>
+            /// <returns>Ship with subsystem.</returns>
+            public Ship With(ISubSystem subSystem)
+            {
+                this.SubSystems.Add(subSystem);
+                return this;
             }
         }
     }

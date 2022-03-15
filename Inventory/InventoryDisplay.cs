@@ -113,12 +113,10 @@
             /// </summary>
             private readonly InventoryDisplaySettings settings;
 
-
-
             /// <summary>
             /// Count of indicators.
             /// </summary>
-            private int indicators = 0;
+            private readonly int indicators = 0;
 
             /// <summary>
             /// Warn color.

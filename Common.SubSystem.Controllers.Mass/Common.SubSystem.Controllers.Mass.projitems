@@ -3,12 +3,12 @@
   <PropertyGroup>
     <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>7ad398f5-e6e9-48ad-b5b2-9eaada385314</SharedGUID>
+    <SharedGUID>6d28d2ea-762c-441b-951a-9732d29bcf1f</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Common.SubSystem</Import_RootNamespace>
+    <Import_RootNamespace>Common.SubSystem.Controllers.Mass</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)SubSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SubSystem.Controllers.Mass.cs" />
   </ItemGroup>
 </Project>

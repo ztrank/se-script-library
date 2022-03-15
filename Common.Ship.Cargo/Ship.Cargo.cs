@@ -24,12 +24,25 @@
     {
         public partial class Ship
         {
-            public List<IMyCargoContainer> CargoContainers { get; } = new List<IMyCargoContainer>();
+            /// <summary>
+            /// Internal cargo hold member. Use CargoHold instead.
+            /// </summary>
+            private ICargoHold _cargoHold;
 
-            public Ship WithCargoContainers()
+            /// <summary>
+            /// Gets the CargoHold subsystem.
+            /// </summary>
+            public ICargoHold CargoHold
             {
-                this.GridTerminalSystem.GetBlocksOfType(this.CargoContainers, b => b.IsSameConstructAs(this.Me));
-                return this;
+                get
+                {
+                    if (this._cargoHold == null)
+                    {
+                        this._cargoHold = (ICargoHold)this.SubSystems.Find(s => s is ICargoHold);
+                    }
+
+                    return _cargoHold;
+                }
             }
         }
     }

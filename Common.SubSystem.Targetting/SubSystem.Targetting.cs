@@ -22,28 +22,20 @@
 
     public partial class Program
     {
-        public partial class Ship
+        /// <summary>
+        /// Targetting Subsystem.
+        /// </summary>
+        public partial interface ITargettingSubSystem : ISubSystem
         {
-            /// <summary>
-            /// Internal reference to the controller sub system.
-            /// </summary>
-            private IControllerSubSystem controllers;
 
-            /// <summary>
-            /// Gets the controller subsystem.
-            /// </summary>
-            public IControllerSubSystem Controllers
-            {
-                get
-                {
-                    if (this.controllers == null)
-                    {
-                        this.controllers = (IControllerSubSystem)this.SubSystems.Find(s => s is IControllerSubSystem);
-                    }
+        }
 
-                    return this.controllers;
-                }
-            }
+        /// <summary>
+        /// Targetting Subsystem.
+        /// </summary>
+        public partial class TargettingSubSystem : SubSystem, ITargettingSubSystem
+        {
+
         }
     }
 }

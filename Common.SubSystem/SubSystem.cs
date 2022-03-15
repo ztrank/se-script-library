@@ -22,6 +22,77 @@
 
     partial class Program
     {
+        public interface ISubSystem
+        {
+            /// <summary>
+            /// Attaches this component to running program values.
+            /// </summary>
+            /// <param name="program">Running program.</param>
+            /// <param name="ini">My Ini.</param>
+            /// <param name="log">Log function.</param>
+            /// <param name="error">Error function.</param>
+            /// <param name="debug">Debug value.</param>
+            void Attach(MyGridProgram program, MyIni ini, Action<string> log, Action<string> error, bool debug = false);
+
+            /// <summary>
+            /// Attaches this component to running program values.
+            /// </summary>
+            /// <param name="gridTerminalSystem">Grid terminal system.</param>
+            /// <param name="cpu">Programmable block.</param>
+            /// <param name="runtime">Runtime info.</param>
+            /// <param name="igc">Intergrid communication.</param>
+            /// <param name="ini">My Ini.</param>
+            /// <param name="log">Log function.</param>
+            /// <param name="error">Error function.</param>
+            /// <param name="debug">Debug flag.</param>
+            void Attach(IMyGridTerminalSystem gridTerminalSystem, IMyProgrammableBlock cpu, IMyGridProgramRuntimeInfo runtime, IMyIntergridCommunicationSystem igc, MyIni ini, Action<string> log, Action<string> error, bool debug = false);
+            
+            /// <summary>
+            /// Gets the Grid Terminal System.
+            /// </summary>
+            IMyGridTerminalSystem GridTerminalSystem { get; }
+
+            /// <summary>
+            /// Gets the running CPU.
+            /// </summary>
+            IMyProgrammableBlock CPU { get; }
+
+            /// <summary>
+            /// Gets the Runtime Info.
+            /// </summary>
+            IMyGridProgramRuntimeInfo Runtime { get; }
+
+            /// <summary>
+            /// Gets the Intergrid communication system.
+            /// </summary>
+            IMyIntergridCommunicationSystem IGC { get; }
+
+            /// <summary>
+            /// Gets the INI for the program.
+            /// </summary>
+            MyIni INI { get; }
+
+            /// <summary>
+            /// Gets the debug flat.
+            /// </summary>
+            bool Debug { get; }
+
+            /// <summary>
+            /// Gets a value indicating whether this subsystem has been attached or not.
+            /// </summary>
+            bool IsAttached { get; }
+
+            /// <summary>
+            /// Gets a value indicating whether the subsystem has been initialized or not.
+            /// </summary>
+            bool IsInitialized { get; }
+
+            /// <summary>
+            /// Initializes the subsystem.
+            /// </summary>
+            void Initialize();
+        }
+
         /// <summary>
         /// SubSystem Not Attached Exception.
         /// </summary>
@@ -46,7 +117,7 @@
         /// <summary>
         /// Abstract SubSytem class for constituent components.
         /// </summary>
-        public abstract class SubSystem
+        public abstract class SubSystem : ISubSystem
         {
             /// <summary>
             /// Terminal Block list.
@@ -74,6 +145,11 @@
             private IMyIntergridCommunicationSystem igc;
 
             /// <summary>
+            /// Ini from the Program.
+            /// </summary>
+            private MyIni ini;
+
+            /// <summary>
             /// Log Function.
             /// </summary>
             private Action<string> log;
@@ -92,12 +168,13 @@
             /// Attaches this component to running program values.
             /// </summary>
             /// <param name="program">Running program.</param>
+            /// <param name="ini">My Ini.</param>
             /// <param name="log">Log function.</param>
             /// <param name="error">Error function.</param>
             /// <param name="debug">Debug value.</param>
-            public void Attach(MyGridProgram program, Action<string> log, Action<string> error, bool debug = false)
+            public void Attach(MyGridProgram program, MyIni ini, Action<string> log, Action<string> error, bool debug = false)
             {
-                this.Attach(program.GridTerminalSystem, program.Me, program.Runtime, program.IGC, log, error, debug);
+                this.Attach(program.GridTerminalSystem, program.Me, program.Runtime, program.IGC, ini, log, error, debug);
             }
 
             /// <summary>
@@ -110,7 +187,7 @@
             /// <param name="log">Log function.</param>
             /// <param name="error">Error function.</param>
             /// <param name="debug">Debug flag.</param>
-            public void Attach(IMyGridTerminalSystem gridTerminalSystem, IMyProgrammableBlock cpu, IMyGridProgramRuntimeInfo runtime, IMyIntergridCommunicationSystem igc, Action<string> log, Action<string> error, bool debug = false)
+            public void Attach(IMyGridTerminalSystem gridTerminalSystem, IMyProgrammableBlock cpu, IMyGridProgramRuntimeInfo runtime, IMyIntergridCommunicationSystem igc, MyIni ini, Action<string> log, Action<string> error, bool debug = false)
             {
                 this.gridTerminalSystem = gridTerminalSystem;
                 this.cpu = cpu;
@@ -119,6 +196,7 @@
                 this.error = error;
                 this.debug = debug;
                 this.igc = igc;
+                this.ini = ini;
             }
 
             /// <summary>
@@ -140,7 +218,12 @@
             /// Gets the Intergrid communication system.
             /// </summary>
             public IMyIntergridCommunicationSystem IGC => this.AssertAttached(this.igc);
-            
+
+            /// <summary>
+            /// Gets the INI for the program.
+            /// </summary>
+            public MyIni INI => this.AssertAttached(this.ini);
+
             /// <summary>
             /// Gets the debug flat.
             /// </summary>
@@ -188,6 +271,7 @@
             /// </summary>
             protected virtual void OnReinitialize()
             {
+                this.OnInitialize();
             }
 
             /// <summary>

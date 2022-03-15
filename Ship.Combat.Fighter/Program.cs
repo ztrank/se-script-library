@@ -44,6 +44,7 @@
         // to learn more about ingame scripts.
         private readonly Ship ship;
 
+        private readonly MyIni ini = new MyIni();
         public Program()
         {
             // The constructor, called only once every session and
@@ -59,13 +60,19 @@
             List<IMyShipController> controllers = new List<IMyShipController>();
             this.GridTerminalSystem.GetBlocksOfType(controllers, b => b.IsSameConstructAs(this.Me));
 
-            this.ship = new Ship(this)
-                .WithControllers()
-                .WithConnectors()
-                .WithCargoContainers()
-                .WithWeaponSystems();
+            if (this.ini.TryParse(this.Me.CustomData))
+            {
+                this.ship = new Ship(this, this.ini)
+                    .With(new TargettingSubSystem())
+                    .With(new DockingSubSystem())
+                    .With(new WeaponSubSystem())
+                    .With(new ControllerSubSystem())
+                    .With(new CargoHold())
+                    .With(new CommunicationArray());
+            }
+            
 
-            foreach(WeaponSystem weapon in this.ship.WeaponSystems)
+            foreach(WeaponSystem weapon in this.ship.WeaponSubSystem.WeaponSystems)
             {
                 this.Echo($"{weapon.MyGun.CustomName}: {weapon.AmmoItemType.TypeId} | {weapon.AmmoItemType.SubtypeId}");
             }
@@ -92,6 +99,15 @@
             // 
             // The method itself is required, but the arguments above
             // can be removed if not needed.
+            if (argument != null)
+            {
+
+            }
+
+            if ((updateSource & UpdateType.Update10) > 0)
+            {
+
+            }
         }
     }
 }

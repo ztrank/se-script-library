@@ -22,28 +22,27 @@
 
     public partial class Program
     {
-        public partial class Ship
+        public partial interface IControllerSubSystem
+        {
+            Vector3D CenterOfMass { get; }
+            MyShipMass CalculateShipMass();
+        }
+
+        /// <summary>
+        /// Ship properties and methods for Mass calculations.
+        /// </summary>
+        public partial class ControllerSubSystem
         {
             /// <summary>
-            /// Internal reference to the controller sub system.
+            /// Gets the center of mass of the ship.
             /// </summary>
-            private IControllerSubSystem controllers;
+            public Vector3D CenterOfMass => this.Main.CenterOfMass;
 
             /// <summary>
-            /// Gets the controller subsystem.
+            /// Calculates the ship mass.
             /// </summary>
-            public IControllerSubSystem Controllers
-            {
-                get
-                {
-                    if (this.controllers == null)
-                    {
-                        this.controllers = (IControllerSubSystem)this.SubSystems.Find(s => s is IControllerSubSystem);
-                    }
-
-                    return this.controllers;
-                }
-            }
+            /// <returns>My Ship Mass.</returns>
+            public MyShipMass CalculateShipMass() => this.Main.CalculateShipMass();
         }
     }
 }
