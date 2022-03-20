@@ -61,6 +61,11 @@
         private readonly AssemblerNetwork assemblerNetwork;
 
         /// <summary>
+        /// Refinery Collection Controller.
+        /// </summary>
+        private readonly RefineryCollectionController refineryCollectionController;
+
+        /// <summary>
         /// Program Constructor. Runs at compile, and game session startup.
         /// </summary>
         public Program()
@@ -84,6 +89,14 @@
 
                 this.GridTerminalSystem.GetBlocksOfType(this.CargoContainers, b => b.IsSameConstructAs(this.Me));
                 this.assemblerNetwork.ConnectContainers(this.CargoContainers);
+
+                // Get the refinery collection panel / grid and pass in either the single panel or the reference panel
+                IMyTextSurface surface = null;
+                this.refineryCollectionController = new RefineryCollectionController(surface, this.GridTerminalSystem, this.Me);
+                this.refineryCollectionController.QueryGrid();
+
+                // this.refineryCollectionController.On("selection", this.RefinerySettingsController.Change);
+                this.refineryCollectionController.On("rerender", this.RedrawRefineries);
             }
             else
             {
@@ -102,9 +115,9 @@
                         this.Commands[this.commandLine.Argument(0)].Invoke(updateSource);
                     }
                 }
-                else
+                else if ((updateSource & UpdateType.Update100) > 0)
                 {
-
+                    this.RedrawRefineries(null, null);
                 }
             }
             catch (Exception ex)
@@ -112,6 +125,12 @@
                 this.Me.GetSurface(0).WriteText(ex.Message);
             }
             
+        }
+
+        private void RedrawRefineries(string @event, object model)
+        {
+            // If using a DisplayGrid, do this for each item.
+            this.refineryCollectionController.Draw(Vector2.Zero);
         }
 
         private void ClearQueue(UpdateType updateSource)

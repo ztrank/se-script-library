@@ -51,8 +51,22 @@
     <AdditionalFiles Include="Instructions.readme" />
     <AdditionalFiles Include="thumb.png" />
     <AdditionalFiles Include="MDK\whitelist.cache" />
+    <Compile Include="Refineries\Controllers\OreFilterCollectionController.cs" />
+    <Compile Include="Refineries\Controllers\RefineryCollectionController.cs" />
+    <Compile Include="Refineries\Models\OreFilterCollection.cs" />
+    <Compile Include="Refineries\Models\OreFilter.cs" />
+    <Compile Include="Refineries\Models\OreFilterCollectionModel.cs" />
+    <Compile Include="Refineries\Models\RefineryCollection.cs" />
+    <Compile Include="Refineries\Models\RefineryCollectionModel.cs" />
+    <Compile Include="Refineries\Models\RefineryGroup.cs" />
+    <Compile Include="Refineries\Views\OreFilterCollectionView.cs" />
+    <Compile Include="Refineries\Views\RefineryCollectionView.cs" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
+  <Import Project="..\Common.UI\Common.UI.projitems" Label="Shared" />
+  <Import Project="..\Common.UI.Selection\Common.UI.Selection.projitems" Label="Shared" />
+  <Import Project="..\Common.Sprite.Helper\Sprite.Helper.projitems" Label="Shared" />
+  <Import Project="..\Common.Events\Common.Events.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="MDK\MDK.options.props" DestinationFolder="$(TargetDir)\MDK" />
