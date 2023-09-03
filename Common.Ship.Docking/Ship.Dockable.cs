@@ -24,47 +24,19 @@
     {
         public partial class Ship
         {
-            /// <summary>
-            /// List of ship connectors for this grid.
-            /// </summary>
-            public List<IMyShipConnector> Connectors { get; } = new List<IMyShipConnector>();
+            private IDockingSubsystem dockingSubsystem;
 
-            public Ship WithConnectors()
+            public IDockingSubsystem DockingSubsystem
             {
-                this.SetMyConnectors();
-                return this;
-            }
-
-            /// <summary>
-            /// Tries to get the first attached connector.
-            /// </summary>
-            /// <param name="otherConnector">First found attached connector.</param>
-            /// <returns>True if an attached connector is found.</returns>
-            public bool TryGetOtherConnector(out IMyShipConnector otherConnector)
-            {
-                if (!this.Connectors.Any())
+                get
                 {
-                    this.SetMyConnectors();
-                }
-
-                foreach (IMyShipConnector connector in this.Connectors)
-                {
-                    if (connector.Status == MyShipConnectorStatus.Connected && connector.OtherConnector != null && !connector.OtherConnector.IsSameConstructAs(this.Me))
+                    if (this.dockingSubsystem == null)
                     {
-                        otherConnector = connector.OtherConnector;
-                        return true;
+                        this.dockingSubsystem = (IDockingSubsystem)this.SubSystems.Find(s => s is IDockingSubsystem);
                     }
-                }
-                otherConnector = null;
-                return false;
-            }
 
-            /// <summary>
-            /// Sets the connectors of this dockable grid.
-            /// </summary>
-            public void SetMyConnectors()
-            {
-                this.GridTerminalSystem.GetBlocksOfType(this.Connectors, b => b.IsSameConstructAs(this.Me));
+                    return this.dockingSubsystem;
+                }
             }
         }
     }

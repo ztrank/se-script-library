@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>7ffe75f2-6a38-408b-93b5-73daf6550b6b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Common.UI.Selection</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ISelectable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SelectionController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SelectionMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SelectionModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SelectionView.cs" />
+  </ItemGroup>
+</Project>

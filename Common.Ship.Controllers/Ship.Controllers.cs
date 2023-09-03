@@ -25,39 +25,24 @@
         public partial class Ship
         {
             /// <summary>
-            /// Gets or sets the main ship controller.
+            /// Internal reference to the controller sub system.
             /// </summary>
-            public IMyShipController Controller { get; set; }
+            private IControllerSubSystem controllers;
 
             /// <summary>
-            /// Gets all controllers on the ship.
+            /// Gets the controller subsystem.
             /// </summary>
-            public List<IMyShipController> Controllers { get; } = new List<IMyShipController>();
-
-            /// <summary>
-            /// Finds the controllers and attempts to find the main controller on the ship.
-            /// </summary>
-            /// <returns>The ship instance.</returns>
-            public Ship WithControllers()
+            public IControllerSubSystem Controllers
             {
-                this.GridTerminalSystem.GetBlocksOfType(this.Controllers, b => b.IsSameConstructAs(this.Me));
-                if (this.Controllers.Count > 1)
+                get
                 {
-                    foreach (IMyShipController controller in this.Controllers)
+                    if (this.controllers == null)
                     {
-                        if (controller.IsMainCockpit)
-                        {
-                            this.Controller = controller;
-                        }
+                        this.controllers = (IControllerSubSystem)this.SubSystems.Find(s => s is IControllerSubSystem);
                     }
-                }
 
-                if (this.Controller == null)
-                {
-                    this.Controller = this.Controllers.FirstOrDefault();
+                    return this.controllers;
                 }
-
-                return this;
             }
         }
     }

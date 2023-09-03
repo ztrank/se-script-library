@@ -52,6 +52,29 @@
   </ItemGroup>
   <Import Project="..\Common.IGC.Server\Common.IGC.Server.projitems" Label="Shared" />
   <Import Project="..\Common.IGC.Connection\Common.IGC.Connection.projitems" Label="Shared" />
+  <Import Project="..\Common.Ship\Ship.Common.projitems" Label="Shared" />
+  <Import Project="..\Common.Ship.Cargo\Common.Ship.Cargo.projitems" Label="Shared" />
+  <Import Project="..\Common.Ship.Comms\Common.Ship.Comms.projitems" Label="Shared" />
+  <Import Project="..\Common.Ship.Controllers\Common.Ship.Controllers.projitems" Label="Shared" />
+  <Import Project="..\Common.Ship.Docking\Docking.Shared.projitems" Label="Shared" />
+  <Import Project="..\Common.Ship.Weapons\Common.Ship.Weapons.projitems" Label="Shared" />
+  <Import Project="..\Common.Sprite.Helper\Sprite.Helper.projitems" Label="Shared" />
+  <Import Project="..\Common.Sprite.ResourceLevel\ResourceLevelSpriteLibrary.projitems" Label="Shared" />
+  <Import Project="..\Common.Sprite.Serializer\SpriteSerializer.projitems" Label="Shared" />
+  <Import Project="..\Common.Inventory.GasTanks\Common.Inventory.GasTanks.projitems" Label="Shared" />
+  <Import Project="..\Common.Inventory\Inventory.Shared.projitems" Label="Shared" />
+  <Import Project="..\Common.Display.Grid\DisplayGrid.projitems" Label="Shared" />
+  <Import Project="..\Common.Array.Converter\Common.Array.Converter.projitems" Label="Shared" />
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem\Common.SubSystem.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.Cargo\Common.SubSystem.Cargo.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.CommunicationArray\Common.SubSystem.CommunicationArray.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.Controllers\Common.SubSystem.Controllers.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.Docking\Common.SubSystem.Docking.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.Controllers.Mass\Common.SubSystem.Controllers.Mass.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.Targetting\Common.SubSystem.Targetting.projitems" Label="Shared" />
+  <Import Project="..\Common.SubSystem.Weapons\Common.SubSystem.Weapons.projitems" Label="Shared" />
+  <Import Project="..\Common.Events\Common.Events.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="MDK\MDK.options.props" DestinationFolder="$(TargetDir)\MDK" />

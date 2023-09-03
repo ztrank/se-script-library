@@ -42,13 +42,13 @@
         // https://github.com/malware-dev/MDK-SE/wiki/Quick-Introduction-to-Space-Engineers-Ingame-Scripts
         //
         // to learn more about ingame scripts.
-        private bool IsServer = false;
-        private Server server;
-        private Connection connection;
-        private IMyTextPanel panel;
-        private IMyTextPanel panel2;
-        private IMyTextPanel panel3;
-        private List<MySprite> sprites = new List<MySprite>();
+        private readonly bool IsServer = false;
+        private readonly Server server;
+        private readonly Connection connection;
+        private readonly IMyTextPanel panel;
+        private readonly IMyTextPanel panel2;
+        private readonly IMyTextPanel panel3;
+        private readonly List<MySprite> sprites = new List<MySprite>();
         private Vector2 linePosition = new Vector2();
         private readonly MyIni ini = new MyIni();
         private int count = 0;

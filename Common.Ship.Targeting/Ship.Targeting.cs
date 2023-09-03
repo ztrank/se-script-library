@@ -28,12 +28,24 @@
         public partial class Ship
         {
             /// <summary>
-            /// Initializes the targetting features.
+            /// Internal reference to targetting subsystem.
             /// </summary>
-            /// <returns>Ship with initialized targetting.</returns>
-            public Ship WithTargeting()
+            private ITargettingSubSystem targetting;
+
+            /// <summary>
+            /// Gets the Targetting Sub System.
+            /// </summary>
+            public ITargettingSubSystem Targetting
             {
-                return this;
+                get
+                {
+                    if (this.targetting == null)
+                    {
+                        this.targetting = (ITargettingSubSystem)this.SubSystems.Find(s => s is ITargettingSubSystem);
+                    }
+
+                    return this.targetting;
+                }
             }
         }
     }

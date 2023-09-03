@@ -32,6 +32,8 @@
         /// </summary>
         private readonly MyCommandLine CommandLine = new MyCommandLine();
 
+        private readonly MyIni ini = new MyIni();
+
         /// <summary>
         /// Ship class.
         /// </summary>
@@ -52,13 +54,17 @@
         /// </summary>
         public Program()
         {
-            this.ship = new Ship(this);
+            if (this.ini.TryParse(this.Me.CustomData))
+            {
+                this.ship = new Ship(this, this.ini)
+                    .With(new DockingSubSystem());
 
-            this.ProgramName = "Inventory";
-            this.Commands["empty"] = this.Empty;
-            this.controller = new Inventory(this.GridTerminalSystem, this.Me, this.Stdout, this.Stdout)
-                .Initialize();
-            this.Runtime.UpdateFrequency = UpdateFrequency.Update100;
+                this.ProgramName = "Inventory";
+                this.Commands["empty"] = this.Empty;
+                this.controller = new Inventory(this.GridTerminalSystem, this.Me, this.Stdout, this.Stdout)
+                    .Initialize();
+                this.Runtime.UpdateFrequency = UpdateFrequency.Update100;
+            }
         }
 
         /// <summary>
@@ -90,7 +96,7 @@
         private void Empty(string argument, UpdateType updateSource)
         {
             IMyShipConnector connector;
-            if (this.ship.TryGetOtherConnector(out connector))
+            if (this.ship.DockingSubsystem.TryGetOtherConnector(out connector))
             {
                 this.controller.TransferGrids(connector);
             }

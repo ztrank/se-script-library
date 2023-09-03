@@ -1,0 +1,18 @@
+﻿R e a d m e
+-----------
+
+To use, add the word "auto" to the name of any door you want controlled via this script. When you add a door, you can run this block with an "init" argument to reinitialize, or reload the script.
+
+To change the delay, add custom data to the programmable block:
+
+[global]
+delay=5
+
+If you want log messages in the console, add:
+[settings]
+debug=true
+
+You can also set custom delays per door. To do this, add Custom Data to the door with the following section:
+
+[autodoor]
+delay=5

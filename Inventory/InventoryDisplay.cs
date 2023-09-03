@@ -113,12 +113,10 @@
             /// </summary>
             private readonly InventoryDisplaySettings settings;
 
-
-
             /// <summary>
             /// Count of indicators.
             /// </summary>
-            private int indicators = 0;
+            private readonly int indicators = 0;
 
             /// <summary>
             /// Warn color.
@@ -146,6 +144,32 @@
             private Color bar = Color.Green;
 
             /// <summary>
+            /// Background Color
+            /// </summary>
+            private Color background = Color.Aquamarine;
+
+            /// <summary>
+            /// Cargo Icon Path
+            /// </summary>
+            private string CargoIcon = @"Textures\FactionLogo\Builders\BuilderIcon_1.dds";
+
+            /// <summary>
+            /// Oxygen Icon Path
+            /// </summary>
+            private string OxygenIcon = "IconOxygen";
+
+            /// <summary>
+            /// Reactors Icon Path
+            /// </summary>
+            private string ReactorsIcon = @"Textures\FactionLogo\Others\OtherIcon_19.dds";
+
+            /// <summary>
+            /// Hydrogen Icon Path
+            /// </summary>
+            private string HydrogenIcon = "IconHydrogen";
+
+
+            /// <summary>
             /// Creates a new instance of the inventory display.
             /// </summary>
             /// <param name="surface">Surface to draw on.</param>
@@ -162,7 +186,17 @@
                     this.ShowOxygen = this.ini.Get(section, "oxygen").ToBoolean(true);
                     this.ShowReactors = this.ini.Get(section, "reactors").ToBoolean(false);
 
-                    // TO DO ADD COLOR PARSING.
+                    this.background = this.ParseColor(this.ini.Get($"{section}-colors", "background").ToString(), this.background);
+                    this.warn = this.ParseColor(this.ini.Get($"{section}-colors", "warn").ToString(), this.warn);
+                    this.error = this.ParseColor(this.ini.Get($"{section}-colors", "error").ToString(), this.error);
+                    this.texture = this.ParseColor(this.ini.Get($"{section}-colors", "texture").ToString(), this.texture);
+                    this.border = this.ParseColor(this.ini.Get($"{section}-colors", "border").ToString(), this.border);
+                    this.bar = this.ParseColor(this.ini.Get($"{section}-colors", "bar").ToString(), this.bar);
+
+                    this.OxygenIcon = this.ini.Get($"{section}-icons", "oxygen").ToString(this.OxygenIcon);
+                    this.HydrogenIcon = this.ini.Get($"{section}-icons", "hydrogen").ToString(this.HydrogenIcon);
+                    this.ReactorsIcon = this.ini.Get($"{section}-icons", "reactors").ToString(this.ReactorsIcon);
+                    this.CargoIcon = this.ini.Get($"{section}-icons", "cargo").ToString(this.CargoIcon);
                 }
                 else
                 {
@@ -175,30 +209,31 @@
                 this.Surface = surface;
                 this.Surface.ContentType = ContentType.SCRIPT;
                 this.Surface.Script = "";
+                this.Surface.ScriptBackgroundColor = this.background;
                 this.ViewPort = new RectangleF((this.Surface.TextureSize - this.Surface.SurfaceSize) / 2f, this.Surface.SurfaceSize);
 
                 if (this.ShowCargo)
                 {
-                    this.Cargo = this.CreateIndicator(@"Textures\FactionLogo\Builders\BuilderIcon_1.dds", this.settings.CargoThresholds);
+                    this.Cargo = this.CreateIndicator(this.CargoIcon, this.settings.CargoThresholds);
                     this.indicators++;
 
                 }
 
                 if (this.ShowHydrogen)
                 {
-                    this.Hydrogen = this.CreateIndicator("IconHydrogen", this.settings.HydrogenThresholds);
+                    this.Hydrogen = this.CreateIndicator(this.HydrogenIcon, this.settings.HydrogenThresholds);
                     this.indicators++;
                 }
 
                 if (this.ShowOxygen)
                 {
-                    this.Oxygen = this.CreateIndicator("IconOxygen", this.settings.OxygenThresholds);
+                    this.Oxygen = this.CreateIndicator(this.OxygenIcon, this.settings.OxygenThresholds);
                     this.indicators++;
                 }
 
                 if (this.ShowReactors)
                 {
-                    this.Reactors = this.CreateIndicator(@"Textures\FactionLogo\Others\OtherIcon_19.dds", this.settings.ReactorThresholds);
+                    this.Reactors = this.CreateIndicator(this.ReactorsIcon, this.settings.ReactorThresholds);
                     this.indicators++;
                 }
             }
@@ -282,6 +317,35 @@
                     MaxError = thresholds.MaxError,
                     MaxWarning = thresholds.MaxWarn
                 };
+            }
+
+            /// <summary>
+            /// Parses an (r,g,b,a) or (r,g,b) color
+            /// </summary>
+            /// <param name="colorString">Color String to Parse</param>
+            /// <param name="defaultColor"></param>
+            /// <returns></returns>
+            private Color ParseColor(string colorString, Color defaultColor)
+            {
+                try
+                {
+                    string[] rgba = colorString.Replace("(", "").Replace(")", "").Replace(" ", "").Split(',');
+
+                    if (rgba.Length == 4)
+                    {
+                        return new Color(int.Parse(rgba[0]), int.Parse(rgba[1]), int.Parse(rgba[2]), int.Parse(rgba[3]));
+                    }
+                    else if (rgba.Length == 3)
+                    {
+                        return new Color(int.Parse(rgba[0]), int.Parse(rgba[1]), int.Parse(rgba[2]));
+                    }
+
+                    return defaultColor;
+                }
+                catch
+                {
+                    return defaultColor;
+                }
             }
         }
     }

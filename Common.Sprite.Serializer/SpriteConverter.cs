@@ -30,7 +30,7 @@
             /// <summary>
             /// Ini class for reading and writing INIs.
             /// </summary>
-            private MyIni ini = new MyIni();
+            private readonly MyIni ini = new MyIni();
 
             /// <summary>
             /// Creates a sprite from the ini string.
