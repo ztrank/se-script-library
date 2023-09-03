@@ -1,5 +1,49 @@
 ﻿R e a d m e
 -----------
 
-In this file you can include any instructions or other comments you want to have injected onto the 
-top of your final script. You can safely delete this file if you do not want any such comments.
+Refinery
+-----------
+Create block groups with at least 1 refinery, and 2 conveyor sorters. Name the input sorters with the word 'input' and output sorters with the word 'output'.
+
+Setup a screen grid for two parts, the Refinery list, and the Ore list.
+Each grid should be a block group, if you have more than one you need to have a section in the custom data:
+
+[surface]
+row=#
+column=#
+
+;optionally:
+index=# ;for blocks with multiple screens
+origin=string ;for using a different origin location, values are TopLeft, BottomLeft, TopRight, BottomRight
+
+For controls for the UI, you need a button panel or scifi button panel. 
+Configure the buttons as follows:
+For the refinery controls:
+Button 1: Run the programmable block with argument 'ui refinery 0'
+Button 2: Run the programmable block with argument 'ui refinery 1'
+Button 3: Run the programmable block with argument 'ui refinery 2'
+Button 4: Run the programmable block with argument 'ui refinery 3'
+
+For the Ore controls:
+Button 1: Run the programmable block with argument 'ui ore 0'
+Button 1: Run the programmable block with argument 'ui ore 1'
+Button 1: Run the programmable block with argument 'ui ore 2'
+Button 1: Run the programmable block with argument 'ui ore 3'
+
+For the Programmable block, add custom data with the following:
+
+[refineries]
+refineryButtons=string ;name of the control panel for the refinery buttons
+oreButtons=string ;name of the control panel for the ore buttons
+
+; choose either the ...Grid or the ...Panel options, but not both
+; Grid options:
+refineryUIGrid=string ;group name for the refinery display grid
+oreUIGrid=string ;group name for the ore display grid
+
+; Panel Options:
+refineryUIPanel=string ;name for the refinery display panel
+oreUIPanel=string ;name for the ore display panel
+
+[assemblers]
+main=string ;main assembler name

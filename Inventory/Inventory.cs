@@ -160,6 +160,11 @@
             /// <returns>Inventory Controller.</returns>
             public Inventory Initialize()
             {
+                this.Inventories.Clear();
+                this.OxygenTanks.Clear();
+                this.HydrogenTanks.Clear();
+                this.Reactors.Clear();
+                this.Displays.Clear();
                 this.Settings = new InventorySettings(this.Me, this.Log);
                 this.ReferenceInventory = this.QueryReferenceInventory();
                 this.QueryBlocks();

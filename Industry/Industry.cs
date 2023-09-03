@@ -41,11 +41,6 @@
         private readonly Dictionary<string, Action<UpdateType>> Commands = new Dictionary<string, Action<UpdateType>>();
 
         /// <summary>
-        /// Initialized list of terminal blocks.
-        /// </summary>
-        private readonly List<IMyTerminalBlock> Blocks = new List<IMyTerminalBlock>();
-
-        /// <summary>
         /// List of assemblers.
         /// </summary>
         private readonly List<IMyAssembler> Assemblers = new List<IMyAssembler>();
@@ -61,9 +56,9 @@
         private readonly AssemblerNetwork assemblerNetwork;
 
         /// <summary>
-        /// Refinery Collection Controller.
+        /// Refinery Application.
         /// </summary>
-        private readonly RefineryCollectionController refineryCollectionController;
+        private readonly RefineryApplication refineryApplication;
 
         /// <summary>
         /// Program Constructor. Runs at compile, and game session startup.
@@ -71,37 +66,88 @@
         public Program()
         {
             MyIniParseResult result;
-            this.Commands["clear"] = this.ClearQueue;
-            this.Commands["empty"] = this.Empty;
 
             if (this.ini.TryParse(this.Me.CustomData, out result))
             {
+                string refineries = "refineries";
+                string invalidRefinery = "Invalid Refinery Configuration.";
                 string mainAssemblerName = this.ini.Get("assemblers", "main").ToString("Assembler");
                 IMyAssembler assembler = this.GridTerminalSystem.GetBlockWithName(mainAssemblerName) as IMyAssembler;
-                if (assembler == null)
+                if (assembler != null)
                 {
-                    throw new Exception($"Unable to find the main assembler with name: {mainAssemblerName}");
+                    this.Commands["clear"] = this.ClearQueue;
+                    this.Commands["empty"] = this.Empty;
+                    this.GridTerminalSystem.GetBlocksOfType(this.Assemblers, b => b.IsSameConstructAs(this.Me));
+
+                    this.assemblerNetwork = new AssemblerNetwork(assembler, this.Assemblers, this.Stdout);
+
+                    this.GridTerminalSystem.GetBlocksOfType(this.CargoContainers, b => b.IsSameConstructAs(this.Me));
+                    this.assemblerNetwork.ConnectContainers(this.CargoContainers);
                 }
                 
-                this.GridTerminalSystem.GetBlocksOfType(this.Assemblers, b => b.IsSameConstructAs(this.Me));
                 
-                this.assemblerNetwork = new AssemblerNetwork(assembler, this.Assemblers, this.Stdout);
 
-                this.GridTerminalSystem.GetBlocksOfType(this.CargoContainers, b => b.IsSameConstructAs(this.Me));
-                this.assemblerNetwork.ConnectContainers(this.CargoContainers);
+                string refineryUIGrid = this.ini.Get(refineries, "refineryUIGrid").ToString();
+                string oreUIGrid = this.ini.Get(refineries, "oreUIGrid").ToString();
+                string refineryUIPanel = this.ini.Get(refineries, "refineryUIPanel").ToString();
+                string oreUIPanel = this.ini.Get(refineries, "oreUIPanel").ToString();
+                string refineryButtonName = this.ini.Get(refineries, "refineryButtons").ToString();
+                string oreButtonName = this.ini.Get(refineries, "oreButtons").ToString();
 
-                // Get the refinery collection panel / grid and pass in either the single panel or the reference panel
-                IMyTextSurface surface = null;
-                this.refineryCollectionController = new RefineryCollectionController(surface, this.GridTerminalSystem, this.Me);
-                this.refineryCollectionController.QueryGrid();
+                IMyBlockGroup refinerySurfaceGrid = string.IsNullOrWhiteSpace(refineryUIGrid) ? null : this.GridTerminalSystem.GetBlockGroupWithName(refineryUIGrid);
+                IMyBlockGroup oreSurfaceGrid = string.IsNullOrWhiteSpace(oreUIGrid) ? null : this.GridTerminalSystem.GetBlockGroupWithName(oreUIGrid);
+                IMyTextPanel refinerySurface = string.IsNullOrWhiteSpace(refineryUIPanel) ? null : (IMyTextPanel)this.GridTerminalSystem.GetBlockWithName(refineryUIPanel);
+                IMyTextPanel oreSurface = string.IsNullOrWhiteSpace(oreUIPanel) ? null : (IMyTextPanel)this.GridTerminalSystem.GetBlockWithName(oreUIPanel);
 
-                // this.refineryCollectionController.On("selection", this.RefinerySettingsController.Change);
-                this.refineryCollectionController.On("rerender", this.RedrawRefineries);
+                IMyButtonPanel refineryButtons = (IMyButtonPanel)this.GridTerminalSystem.GetBlockWithName(refineryButtonName);
+                IMyButtonPanel oreButtons = (IMyButtonPanel)this.GridTerminalSystem.GetBlockWithName(oreButtonName);
+
+                if (oreSurfaceGrid == null && oreSurface == null)
+                {
+                    throw new Exception($"{invalidRefinery} No Ore text surface or grid.");
+                }
+
+                if (refinerySurfaceGrid == null && refinerySurface == null)
+                {
+                    throw new Exception($"{invalidRefinery} No Refinery text surface or grid.");
+                }
+
+                if (refineryButtons == null)
+                {
+                    throw new Exception($"{invalidRefinery} No Refinery Buttons.");
+                }
+
+                if (oreButtons == null)
+                {
+                    throw new Exception($"{invalidRefinery} No Ore buttons.");
+                }
+
+                if (refinerySurfaceGrid != null && oreSurfaceGrid != null)
+                {
+                    this.refineryApplication = new RefineryApplication(this.GridTerminalSystem, this.Me, this.Runtime, refinerySurfaceGrid, oreSurfaceGrid, refineryButtons, oreButtons, this.Echo);
+                }
+                else if (refinerySurfaceGrid != null && oreSurfaceGrid == null)
+                {
+                    this.refineryApplication = new RefineryApplication(this.GridTerminalSystem, this.Me, this.Runtime, refinerySurfaceGrid, oreSurface, refineryButtons, oreButtons, this.Echo);
+                }
+                else if (refinerySurfaceGrid == null && oreSurfaceGrid != null)
+                {
+                    this.refineryApplication = new RefineryApplication(this.GridTerminalSystem, this.Me, this.Runtime, refinerySurface, oreSurfaceGrid, refineryButtons, oreButtons, this.Echo);
+                }
+                else
+                {
+                    this.refineryApplication = new RefineryApplication(this.GridTerminalSystem, this.Me, this.Runtime, refinerySurface, oreSurface, refineryButtons, oreButtons, this.Echo);
+                }
+
+                this.refineryApplication.Initialize();
             }
             else
             {
                 this.Stdout($"Unable to read INI: {result}");
+                this.Me.GetSurface(0).WriteText($"Unable to read INI: {result}");
             }
+            this.Me.GetSurface(0).ContentType = ContentType.NONE;
+            this.Runtime.UpdateFrequency = UpdateFrequency.Update100;
         }
 
         public void Main(string argument, UpdateType updateSource)
@@ -115,22 +161,15 @@
                         this.Commands[this.commandLine.Argument(0)].Invoke(updateSource);
                     }
                 }
-                else if ((updateSource & UpdateType.Update100) > 0)
-                {
-                    this.RedrawRefineries(null, null);
-                }
+
+                this.refineryApplication.Execute(argument, updateSource);
             }
             catch (Exception ex)
             {
+                this.Me.GetSurface(0).ContentType = ContentType.TEXT_AND_IMAGE;
                 this.Me.GetSurface(0).WriteText(ex.Message);
+                throw;
             }
-            
-        }
-
-        private void RedrawRefineries(string @event, object model)
-        {
-            // If using a DisplayGrid, do this for each item.
-            this.refineryCollectionController.Draw(Vector2.Zero);
         }
 
         private void ClearQueue(UpdateType updateSource)

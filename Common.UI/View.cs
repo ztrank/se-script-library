@@ -94,9 +94,19 @@
                 /// <param name="offset">Offset to apply.</param>
                 public void Draw(Vector2 offset)
                 {
-                    using (MySpriteDrawFrame frame = this.Surface.DrawFrame())
+                    this.Draw(this.Surface, offset);
+                }
+
+                /// <summary>
+                /// Draws the sprites to the surface.
+                /// </summary>
+                /// <param name="surface">Surface to draw on.</param>
+                /// <param name="offset">Offset for sprite positioning.</param>
+                public void Draw(IMyTextSurface surface, Vector2 offset)
+                {
+                    using (MySpriteDrawFrame frame = surface.DrawFrame())
                     {
-                        foreach(MySprite sprite in this.Sprites)
+                        foreach (MySprite sprite in this.Sprites)
                         {
                             // Do something with the surface rectangle and add it to the offset
                             frame.Add(new MySprite()

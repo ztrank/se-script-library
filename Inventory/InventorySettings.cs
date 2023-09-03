@@ -103,6 +103,15 @@
                         { "reactor", new ResourceLevelIndicator.DisplayColorThresholds(ini, "inventory", "Reactor", .1f, .2f) }
                     };
 
+                    foreach (string key in this.IndicatorThresholds.Keys)
+                    {
+                        string propPrefix = $"f{key[0].ToString().ToUpper() + key.Substring(1)}";
+                        this.IndicatorThresholds[key].MinWarn = (float)ini.Get("inventory", $"{propPrefix}MinWarn").ToDecimal((decimal)this.IndicatorThresholds[key].MinWarn);
+                        this.IndicatorThresholds[key].MinError = (float)ini.Get("inventory", $"{propPrefix}MinError").ToDecimal((decimal)this.IndicatorThresholds[key].MinError);
+                        this.IndicatorThresholds[key].MaxWarn = (float)ini.Get("inventory", $"{propPrefix}MaxWarn").ToDecimal((decimal)this.IndicatorThresholds[key].MaxWarn);
+                        this.IndicatorThresholds[key].MaxError = (float)ini.Get("inventory", $"{propPrefix}MaxError").ToDecimal((decimal)this.IndicatorThresholds[key].MaxError);
+                    }
+
                     this.Displays = new List<InventorySettingsDisplay>();
                     ArrayConverter arrayConverter = new ArrayConverter();
                     List<string> displayItems = new List<string>();

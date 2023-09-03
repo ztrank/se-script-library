@@ -59,6 +59,7 @@
     <Compile Include="Refineries\Models\RefineryCollection.cs" />
     <Compile Include="Refineries\Models\RefineryCollectionModel.cs" />
     <Compile Include="Refineries\Models\RefineryGroup.cs" />
+    <Compile Include="Refineries\RefineryApplication.cs" />
     <Compile Include="Refineries\Views\OreFilterCollectionView.cs" />
     <Compile Include="Refineries\Views\RefineryCollectionView.cs" />
   </ItemGroup>
@@ -67,6 +68,9 @@
   <Import Project="..\Common.UI.Selection\Common.UI.Selection.projitems" Label="Shared" />
   <Import Project="..\Common.Sprite.Helper\Sprite.Helper.projitems" Label="Shared" />
   <Import Project="..\Common.Events\Common.Events.projitems" Label="Shared" />
+  <Import Project="..\Common.UI.Surface\Common.UI.Surface.projitems" Label="Shared" />
+  <Import Project="..\Common.UI.Surface.Grid\Common.UI.Surface.Grid.projitems" Label="Shared" />
+  <Import Project="..\Common.UI.Input\Common.UI.Input.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="MDK\MDK.options.props" DestinationFolder="$(TargetDir)\MDK" />

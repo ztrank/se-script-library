@@ -67,6 +67,51 @@
                 otherConnector = null;
                 return false;
             }
+            
+            /// <summary>
+            /// Gets all other connectors. Returns false if no other connectors are found.
+            /// </summary>
+            /// <param name="otherConnectors">List of connectors to populate</param>
+            /// <returns>True if other connectors were found.</returns>
+            public bool TryGetOtherConnectors(List<IMyShipConnector> otherConnectors)
+            {
+                if (!this.Connectors.Any())
+                {
+                    this.SetMyConnectors();
+                }
+
+                bool found = false;
+                foreach (IMyShipConnector connector in this.Connectors)
+                {
+                    if (connector.Status == MyShipConnectorStatus.Connected && connector.OtherConnector != null && !connector.OtherConnector.IsSameConstructAs(this.CPU))
+                    {
+                        otherConnectors.Add(connector.OtherConnector);
+                        found = true;
+                    }
+                }
+
+                return found;
+            }
+
+            public bool TryGetConnectedGrids(List<IMyCubeGrid> otherGrids)
+            {
+                if (!this.Connectors.Any())
+                {
+                    this.SetMyConnectors();
+                }
+
+                bool found = false;
+                foreach(IMyShipConnector connector in this.Connectors)
+                {
+                    if (connector.Status == MyShipConnectorStatus.Connected && connector.OtherConnector != null && !connector.OtherConnector.IsSameConstructAs(this.CPU))
+                    {
+                        otherGrids.Add(connector.OtherConnector.CubeGrid);
+                        found = true;
+                    }
+                }
+
+                return found;
+            }
 
             /// <summary>
             /// Initializes the connectors.

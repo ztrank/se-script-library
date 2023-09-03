@@ -64,6 +64,11 @@
                 public string FontId { get; set; } = "White";
 
                 /// <summary>
+                /// Gets or sets the text color.
+                /// </summary>
+                public Color TextColor { get; set; } = Color.White;
+
+                /// <summary>
                 /// Gets or sets the scale.
                 /// </summary>
                 public float Scale { get; set; } = 1f;

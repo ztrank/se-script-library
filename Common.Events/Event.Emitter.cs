@@ -35,6 +35,26 @@
             private readonly Dictionary<string, List<Action<string, object>>> eventHandlers = new Dictionary<string, List<Action<string, object>>>();
 
             /// <summary>
+            /// Turns a parameterless action into an event handler.
+            /// </summary>
+            /// <param name="action">Parameterless action.</param>
+            /// <returns>Event Handler.</returns>
+            private static Action<string, object> ToEventHandler(Action action)
+            {
+                return (@event, obj) => action();
+            }
+
+            /// <summary>
+            /// Adds the action as an event handler.
+            /// </summary>
+            /// <param name="event">Event name.</param>
+            /// <param name="handler">Parameterless handler.</param>
+            public void On(string @event, Action handler)
+            {
+                this.On(@event, ToEventHandler(handler));
+            }
+
+            /// <summary>
             /// Adds the event handler.
             /// </summary>
             /// <param name="event">Event name.</param>
@@ -74,6 +94,7 @@
                     this.eventHandlers[@event].ForEach(handler => handler?.Invoke(@event, value));
                 }
             }
+
         }
     }
 }

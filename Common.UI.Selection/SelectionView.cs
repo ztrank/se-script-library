@@ -82,6 +82,11 @@
                     return (int)(sizes.Item2.Height / this.GetLineHeight(model.FontId, model.Scale));
                 }
 
+                public int BottomIndex(M model)
+                {
+                    return model.TopIndex + this.MaxVisibleRows(model);
+                }
+
                 /// <summary>
                 /// Implementation of the OnRender method to draw the header and body.
                 /// </summary>
@@ -123,7 +128,8 @@
                 /// <param name="sprites">List of sprites to add values to.</param>
                 protected virtual void GenerateRows(M model, List<MySprite> sprites)
                 {
-                    for (int i = model.TopIndex; i <= model.BottomIndex && i < model.Collection.Values.Count(); i++)
+                    int bottomIndex = this.BottomIndex(model);
+                    for (int i = model.TopIndex; i <= bottomIndex && i < model.Collection.Values.Count(); i++)
                     {
                         this.GenerateRow(model, model.Collection.Values[i], i, sprites);
                         this.linePosition += new Vector2(0, this.lineHeight);

@@ -22,30 +22,32 @@
 
     partial class Program
     {
-        /// <summary>
-        /// Controller Abstract Class
-        /// </summary>
-        public abstract class Controller
+        public class OreFilter : UserInterface.ISelectable
         {
             /// <summary>
-            /// Gets or sets the Grid Terminal System.
+            /// Creates a new instance of an ore filter with the given name.
             /// </summary>
-            public IMyGridTerminalSystem GridTerminalSystem { get; set; }
+            /// <param name="name">Ore name.</param>
+            public OreFilter(string name)
+            {
+                this.Name = name;
+                this.DefinitionId = MyDefinitionId.Parse($"MyObjectBuilder_Ore/{this.Name}");
+            }
 
             /// <summary>
-            /// Gets or sets the programmable block for this grid.
+            /// Gets or sets a value indicating whether the ore filter is selected or not.
             /// </summary>
-            public IMyProgrammableBlock Me { get; set; }
+            public bool IsSelected { get; set; } = false;
 
             /// <summary>
-            /// Gets or sets the Log action.
+            /// Gets the ore name.
             /// </summary>
-            public Action<string> Stdout { get; set; }
+            public string Name { get; }
 
             /// <summary>
-            /// Gets or sets the error action.
+            /// Gets or sets the type name for the sorter filter.
             /// </summary>
-            public Action<string> Stderr { get; set; }
+            public MyDefinitionId DefinitionId { get; }
         }
     }
 }

@@ -73,6 +73,16 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.UI.Selection", "Comm
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Events", "Common.Events\Common.Events.shproj", "{50AD1561-2A34-40C8-925C-A63E9257AE84}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.UI.Surface.Grid", "Common.UI.Surface.Grid\Common.UI.Surface.Grid.shproj", "{BECB5895-F809-48C3-9124-5E65E10E48CD}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.UI.Surface", "Common.UI.Surface\Common.UI.Surface.shproj", "{AC3D0252-7DD6-4BE4-AB87-D8B6CF2CCC57}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.UI.Input", "Common.UI.Input\Common.UI.Input.shproj", "{52EC795C-996E-4E26-968A-EBE52653AEE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Industry - Refineries", "Industry - Refineries\Industry - Refineries.csproj", "{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autodoors", "Autodoors\Autodoors.csproj", "{E93A1028-CBC4-405D-BB37-8703725C3A8E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common.Ship.Cargo\Common.Ship.Cargo.projitems*{051a3877-eb83-4229-a7a1-929d30def462}*SharedItemsImports = 4
@@ -135,6 +145,7 @@ Global
 		Common\Common.projitems*{4f527f62-fcb1-48e3-b565-025a581e887c}*SharedItemsImports = 13
 		Common.Events\Common.Events.projitems*{50ad1561-2a34-40c8-925c-a63e9257ae84}*SharedItemsImports = 13
 		Common.Array.Converter\Common.Array.Converter.projitems*{511b90ac-2aad-4fbe-b9af-b6021ddc910b}*SharedItemsImports = 4
+		Common.UI.Input\Common.UI.Input.projitems*{52ec795c-996e-4e26-968a-ebe52653aee1}*SharedItemsImports = 13
 		Common.Inventory.GasTanks\Common.Inventory.GasTanks.projitems*{5607fb03-3d9a-41d4-8da8-e91046a313f1}*SharedItemsImports = 13
 		Common.SubSystem.Docking\Common.SubSystem.Docking.projitems*{62e9459e-b72d-479f-b4d5-3e64b71c80da}*SharedItemsImports = 13
 		Common.Inventory\Inventory.Shared.projitems*{663760a0-5107-4aec-a36b-5b7682ef78b3}*SharedItemsImports = 13
@@ -153,13 +164,26 @@ Global
 		Common.Ship.Targeting\Common.Ship.Targeting.projitems*{98a3a228-4ece-4cde-9d2a-d1f62c18c55f}*SharedItemsImports = 13
 		Common.Events\Common.Events.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
 		Common.Sprite.Helper\Sprite.Helper.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
+		Common.UI.Input\Common.UI.Input.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
 		Common.UI.Selection\Common.UI.Selection.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
+		Common.UI.Surface.Grid\Common.UI.Surface.Grid.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
+		Common.UI.Surface\Common.UI.Surface.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
 		Common.UI\Common.UI.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
 		Common\Common.projitems*{9c181816-8f60-4bfa-910e-d3bf3e4d61b3}*SharedItemsImports = 4
 		Common.SubSystem.Cargo\Common.SubSystem.Cargo.projitems*{a8137130-b635-473d-a496-5ebdd2c8f692}*SharedItemsImports = 13
 		Common.Inventory.GasTanks\Common.Inventory.GasTanks.projitems*{a9987078-e3a6-4168-a999-5e55162dc773}*SharedItemsImports = 4
 		Common\Common.projitems*{a9987078-e3a6-4168-a999-5e55162dc773}*SharedItemsImports = 4
+		Common.UI.Surface\Common.UI.Surface.projitems*{ac3d0252-7dd6-4be4-ab87-d8b6cf2ccc57}*SharedItemsImports = 13
+		Common.Events\Common.Events.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common.Sprite.Helper\Sprite.Helper.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common.UI.Input\Common.UI.Input.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common.UI.Selection\Common.UI.Selection.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common.UI.Surface.Grid\Common.UI.Surface.Grid.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common.UI.Surface\Common.UI.Surface.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common.UI\Common.UI.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
+		Common\Common.projitems*{ae8a4dee-a1a9-445e-b74f-f48499f8355a}*SharedItemsImports = 4
 		Common.Array.Converter\Common.Array.Converter.projitems*{b2cd9c5d-d824-4286-b8e6-fbf034590b11}*SharedItemsImports = 13
+		Common.UI.Surface.Grid\Common.UI.Surface.Grid.projitems*{becb5895-f809-48c3-9124-5e65e10e48cd}*SharedItemsImports = 13
 		Common.SubSystem.Targetting\Common.SubSystem.Targetting.projitems*{ec7d5e22-67d1-4002-81f2-238d0c76ed76}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -220,6 +244,20 @@ Global
 		{22C5A07A-1BA5-430D-92E7-3F1BB8FCD097}.Release|Any CPU.Build.0 = Debug|x64
 		{22C5A07A-1BA5-430D-92E7-3F1BB8FCD097}.Release|x64.ActiveCfg = Debug|x64
 		{22C5A07A-1BA5-430D-92E7-3F1BB8FCD097}.Release|x64.Build.0 = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Debug|x64.ActiveCfg = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Debug|x64.Build.0 = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Release|Any CPU.ActiveCfg = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Release|Any CPU.Build.0 = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Release|x64.ActiveCfg = Debug|x64
+		{AE8A4DEE-A1A9-445E-B74F-F48499F8355A}.Release|x64.Build.0 = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Debug|x64.ActiveCfg = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Debug|x64.Build.0 = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Release|Any CPU.ActiveCfg = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Release|Any CPU.Build.0 = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Release|x64.ActiveCfg = Debug|x64
+		{E93A1028-CBC4-405D-BB37-8703725C3A8E}.Release|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

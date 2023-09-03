@@ -24,6 +24,7 @@
     {
         public partial class UserInterface
         {
+            public const string SelectionEvt = "selection";
             /// <summary>
             /// Selection Controller.
             /// </summary>
@@ -86,7 +87,7 @@
                     {
                         this.Model.BottomIndex = this.Model.CursorIndex;
                         int maxRows = this.View.MaxVisibleRows(this.Model);
-                        this.Model.TopIndex = this.Model.BottomIndex - maxRows;
+                        this.Model.TopIndex = Math.Max(this.Model.BottomIndex - maxRows, 0);
                     }
 
                     this.Rerender();
@@ -98,6 +99,22 @@
                 public void ChangeSelectionMode()
                 {
                     this.Model.SelectionMode = this.Model.SelectionMode == SelectionMode.Multiple ? SelectionMode.Single : SelectionMode.Multiple;
+                    if (this.Model.SelectionMode == SelectionMode.Single && this.Model.Collection.Values.Where(v => v.IsSelected).ToList().Any())
+                    {
+                        for (int i = 0; i < this.Model.Collection.Values.Count; i++)
+                        {
+                            if (i == this.Model.CursorIndex && this.Model.Collection.Values[i].IsSelected)
+                            {
+                                this.Model.Collection.Values[i].IsSelected = true;
+                            }
+                            else
+                            {
+                                this.Model.Collection.Values[i].IsSelected = false;
+                            }
+                        }
+                    }
+
+                    this.Emit(SelectionEvt, this.Model);
                     this.Rerender();
                 }
 
@@ -117,12 +134,12 @@
                                 continue;
                             }
 
-                            this.Model.Collection.Values[this.Model.CursorIndex].IsSelected = false;
+                            this.Model.Collection.Values[i].IsSelected = false;
                         }
                     }
 
                     this.Rerender();
-                    this.Emit("selection", this.Model);
+                    this.Emit(SelectionEvt, this.Model);
                 }
 
                 /// <summary>
@@ -130,12 +147,11 @@
                 /// </summary>
                 public void SelectAll()
                 {
-                    if (this.Model.SelectionMode == SelectionMode.Multiple)
-                    {
-                        this.Model.Collection.Values.ForEach(m => m.IsSelected = true);
-                        this.Rerender();
-                        this.Emit("selection", this.Model);
-                    }
+                    this.Model.SelectionMode = SelectionMode.Multiple;
+                    this.Model.Collection.Values.ForEach(m => m.IsSelected = true);
+                    this.Rerender();
+                    this.Emit(SelectionEvt, this.Model);
+                    
                 }
 
                 /// <summary>
@@ -145,7 +161,7 @@
                 {
                     this.Model.Collection.Values.ForEach(m => m.IsSelected = false);
                     this.Rerender();
-                    this.Emit("selection", this.Model);
+                    this.Emit(SelectionEvt, this.Model);
                 }
             }
         }

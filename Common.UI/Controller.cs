@@ -27,6 +27,7 @@
         /// </summary>
         public partial class UserInterface
         {
+            public const string RerenderEvt = "rerender";
             /// <summary>
             /// Controller class for User Interfaces.
             /// </summary>
@@ -95,12 +96,22 @@
                 }
 
                 /// <summary>
+                /// Draws the sprites on the given surface.
+                /// </summary>
+                /// <param name="surface">Surface to draw on.</param>
+                /// <param name="offset">Offset to position sprites.</param>
+                public void Draw(IMyTextSurface surface, Vector2 offset)
+                {
+                    this.View.Draw(surface, offset);
+                }
+
+                /// <summary>
                 /// Rerenders the view based on the model.
                 /// </summary>
-                protected void Rerender()
+                public void Rerender()
                 {
                     this.View.Render(this.Model);
-                    this.Emit("rerender", this.Model);
+                    this.Emit(RerenderEvt, this.Model);
                 }
             }
         }

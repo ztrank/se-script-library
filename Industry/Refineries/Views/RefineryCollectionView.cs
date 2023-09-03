@@ -61,7 +61,7 @@
                     Position = this.linePosition,
                     RotationOrScale = model.Scale,
                     FontId = model.FontId,
-                    Color = this.Surface.FontColor,
+                    Color = this.Surface.ScriptForegroundColor,
                     Alignment = TextAlignment.LEFT
                 });
 
@@ -74,7 +74,7 @@
                     Position = this.linePosition,
                     RotationOrScale = model.Scale,
                     FontId = model.FontId,
-                    Color = this.Surface.FontColor,
+                    Color = this.Surface.ScriptForegroundColor,
                     Alignment = TextAlignment.LEFT
                 });
 
@@ -86,7 +86,7 @@
                     Data = "SquareSimple",
                     Size = new Vector2(this.Surface.SurfaceSize.X - 10, 2),
                     Position = this.linePosition + new Vector2(5, -2),
-                    Color = this.Surface.FontColor
+                    Color = this.Surface.ScriptForegroundColor
                 });
 
                 this.linePosition += new Vector2(0, 6);
@@ -101,30 +101,26 @@
             /// <param name="sprites">List of sprites to add values to.</param>
             protected override void GenerateRow(RefineryCollectionModel model, RefineryGroup group, int iteration, List<MySprite> sprites)
             {
-                Color backgroundColor = model.CursorIndex == iteration ? this.Surface.FontColor : this.Surface.BackgroundColor;
-                Color textureColor = model.CursorIndex == iteration ? this.Surface.BackgroundColor : this.Surface.FontColor;
+                Color backgroundColor = model.CursorIndex == iteration ? this.Surface.ScriptForegroundColor : this.Surface.ScriptBackgroundColor;
+                Color textureColor = model.CursorIndex == iteration ? this.Surface.ScriptBackgroundColor : this.Surface.ScriptForegroundColor;
 
-                sprites.Add(new MySprite()
+                sprites.Add(SpriteHelper.VerticalCenter(new Vector2(0, this.lineHeight), "SquareSimple", new Vector2(this.Surface.SurfaceSize.X, this.lineHeight), new Vector2(-1 * this.Surface.SurfaceSize.X / 2f, this.linePosition.Y), backgroundColor));
+                sprites.Add(SpriteHelper.VerticalCenter(new Vector2(0, this.lineHeight), group.IsSelected ? "SquareSimple" : "SquareHollow", new Vector2(this.lineHeight) - new Vector2(2, 2), this.linePosition + new Vector2(2,0), textureColor));
+                if (model.CursorIndex == iteration)
                 {
-                    Type = SpriteType.TEXTURE,
-                    Data = "SquareSimple",
-                    Position = this.linePosition,
-                    Size = new Vector2(this.Surface.SurfaceSize.X, this.lineHeight),
-                    Color = backgroundColor
-                });
-
-                sprites.Add(SpriteHelper.VerticalCenter(new Vector2(0, this.lineHeight), group.IsSelected ? "SquareSimple" : "SquareHollow", new Vector2(this.lineHeight) - new Vector2(2, 2), this.linePosition, textureColor));
+                    sprites.Add(SpriteHelper.VerticalCenter(new Vector2(0, this.lineHeight), "SquareSimple", new Vector2(this.lineHeight) - new Vector2(8, 8), this.linePosition + new Vector2(4, 0), group.IsSelected ? backgroundColor : textureColor));
+                }
+                
                 sprites.Add(new MySprite()
                 {
                     Type = SpriteType.TEXT,
                     Data = group.Name,
                     Alignment = TextAlignment.LEFT,
-                    Position = this.linePosition + new Vector2(this.lineHeight, 0),
+                    Position = this.linePosition + new Vector2(this.lineHeight + 2, 0),
                     FontId = model.FontId,
-                    Color = textureColor
+                    Color = textureColor,
+                    RotationOrScale = 1f
                 });
-
-                this.linePosition += new Vector2(0, this.lineHeight);
             }
         }
     }
