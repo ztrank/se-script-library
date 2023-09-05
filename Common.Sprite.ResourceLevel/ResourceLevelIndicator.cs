@@ -117,7 +117,12 @@
             /// <summary>
             /// Gets or sets the padding size.
             /// </summary>
-            public float Padding { get; set; } = 5f;
+            public float PaddingY => 25f / this.MaxBarCount;
+
+            /// <summary>
+            /// Gets or sets the X Padding
+            /// </summary>
+            public float PaddingX { get; set; } = 5f;
 
             /// <summary>
             /// Gets or sets the value of ratio below which the colors should switch to warning colors.
@@ -165,6 +170,11 @@
             public Color TextureColor { get; set; } = Color.White;
 
             /// <summary>
+            /// Gets or sets the max bar count
+            /// </summary>
+            public int MaxBarCount { get; set; } = 5;
+
+            /// <summary>
             /// Generates the list of sprites to be added to the screen.
             /// </summary>
             /// <param name="position">Position of the center left side of this collection of sprites.</param>
@@ -172,7 +182,7 @@
             public List<MySprite> GenerateSprite(Vector2 position)
             {
                 this.sprites.Clear();
-                this.Viewport = new RectangleF(position + new Vector2(0, this.Padding), this.Size - new Vector2(this.Padding * 2, this.Padding * 4));
+                this.Viewport = new RectangleF(position + new Vector2(0, this.PaddingY), this.Size - new Vector2(this.PaddingX * 2, this.PaddingY * 4));
                 Vector2 center = position + new Vector2(this.Size.X / 2f, 0);
                 this.Ratio = this.Ratio > 1 ? 1 : this.Ratio;
                 this.Ratio = this.Ratio < 0 ? 0 : this.Ratio;
@@ -212,12 +222,14 @@
 
                 // Create the bars.
                 Color clear = this.BarColor.Alpha(0f);
+                float range = 1f / (float)this.MaxBarCount;
+                float rangeStart = range / 2;
+                for (int i = 0; i < this.MaxBarCount; i++)
+                {
+                    Color barColor = this.Ratio > (i * range) + rangeStart ? this.BarColor : clear;
 
-                this.sprites.Add(this.CreateBar(0, this.Viewport.Position, this.Ratio >= 0.2 ? this.BarColor : clear));
-                this.sprites.Add(this.CreateBar(1, this.Viewport.Position, this.Ratio >= 0.4 ? this.BarColor : clear));
-                this.sprites.Add(this.CreateBar(2, this.Viewport.Position, this.Ratio >= 0.6 ? this.BarColor : clear));
-                this.sprites.Add(this.CreateBar(3, this.Viewport.Position, this.Ratio >= 0.8 ? this.BarColor : clear));
-                this.sprites.Add(this.CreateBar(4, this.Viewport.Position, this.Ratio >= 0.9 ? this.BarColor : clear));
+                    this.sprites.Add(this.CreateBar(i, this.Viewport.Position, barColor));
+                }
 
                 if (!string.IsNullOrWhiteSpace(this.Symbol))
                 {
@@ -252,7 +264,7 @@
             /// <returns>Height of inner bars.</returns>
             private float GetBarHeight()
             {
-                return (this.Size.Y - (7 * this.Padding)) / 5;
+                return (this.Size.Y - ((this.MaxBarCount + 2) * this.PaddingY) - (this.BorderSize * 2)) / this.MaxBarCount;
             }
 
             /// <summary>
@@ -282,9 +294,9 @@
             /// <returns></returns>
             private MySprite CreateBar(int index, Vector2 position, Color color)
             {
-                float barPositionX = position.X + this.Padding;
-                float barPositionY = position.Y + (this.Viewport.Height / 2f) - this.Padding * 2;
-                barPositionY -= index * (this.GetBarHeight() + this.Padding);
+                float barPositionX = position.X + this.PaddingX;
+                float barPositionY = position.Y + (this.Viewport.Height / 2f) - (this.PaddingY * 2) - this.BorderSize;
+                barPositionY -= index * (this.GetBarHeight() + this.PaddingY);
                 Vector2 barPosition = new Vector2(barPositionX, barPositionY);
                 return new MySprite()
                 {
@@ -295,6 +307,8 @@
                     Color = color
                 };
             }
+
+            public float BorderSize { get; private set; } = 2f;
         }
     }
 }

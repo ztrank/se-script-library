@@ -146,7 +146,7 @@
             /// <summary>
             /// Background Color
             /// </summary>
-            private Color background = Color.Aquamarine;
+            private Color background = Color.Blue;
 
             /// <summary>
             /// Cargo Icon Path
@@ -168,7 +168,6 @@
             /// </summary>
             private string HydrogenIcon = "IconHydrogen";
 
-
             /// <summary>
             /// Creates a new instance of the inventory display.
             /// </summary>
@@ -185,6 +184,7 @@
                     this.ShowHydrogen = this.ini.Get(section, "hydrogen").ToBoolean(true);
                     this.ShowOxygen = this.ini.Get(section, "oxygen").ToBoolean(true);
                     this.ShowReactors = this.ini.Get(section, "reactors").ToBoolean(false);
+                    this.BarCount = this.ini.Get(section, "iBarCount").ToInt32(5);
 
                     this.background = this.ParseColor(this.ini.Get($"{section}-colors", "background").ToString(), this.background);
                     this.warn = this.ParseColor(this.ini.Get($"{section}-colors", "warn").ToString(), this.warn);
@@ -237,6 +237,11 @@
                     this.indicators++;
                 }
             }
+
+            /// <summary>
+            /// Gets or sets the bar Count
+            /// </summary>
+            private int BarCount { get; set; } = 5;
 
             /// <summary>
             /// Gets the gutter size.
@@ -315,7 +320,8 @@
                     MinError = thresholds.MinError,
                     MinWarning = thresholds.MinWarn,
                     MaxError = thresholds.MaxError,
-                    MaxWarning = thresholds.MaxWarn
+                    MaxWarning = thresholds.MaxWarn,
+                    MaxBarCount = this.BarCount
                 };
             }
 

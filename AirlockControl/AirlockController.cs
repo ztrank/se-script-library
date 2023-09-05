@@ -20,6 +20,16 @@
     using VRage.Game.ObjectBuilders.Definitions;
     using VRageMath;
 
+    /**
+     * TODO:
+     * Convert message handling to coroutine
+     * Check for duplicate / conflicting messages
+     * Add ability to work for a single airlock
+     * Test if this works for multiple airlocks cycling
+     * Send stdout to external source
+     * Rename?
+     **/ 
+
     /// <summary>
     /// Airlock Control program.
     /// </summary>
@@ -51,12 +61,58 @@
         private readonly Dictionary<string, Action> Commands = new Dictionary<string, Action>();
 
         /// <summary>
+        /// Id of output controller
+        /// </summary>
+        private readonly long? outputControllerId;
+
+        /// <summary>
+        /// Tag for the message
+        /// </summary>
+        private readonly string outputControllerMessageTag;
+
+        /// <summary>
+        /// Whether the controller should broadcast its status message
+        /// </summary>
+        private readonly bool sendBroadcastMessage;
+
+        /// <summary>
+        /// The transmission distance for broadcast transmissions
+        /// </summary>
+        private readonly TransmissionDistance transmissionDistance;
+
+        /// <summary>
+        /// Buffer of airlock status messages
+        /// </summary>
+        private readonly List<AirlockStatusMessage> airlockStatusMessages = new List<AirlockStatusMessage>();
+
+        /// <summary>
+        /// Whether external messages should trigger the airlock
+        /// </summary>
+        private readonly bool AllowExternalCommands;
+
+        /// <summary>
+        /// External Command Tag to filter for
+        /// </summary>
+        private readonly string ExternalCommandTag;
+
+        /// <summary>
+        /// Broadcast Listener
+        /// </summary>
+        private readonly IMyBroadcastListener broadcastListener;
+
+        /// <summary>
+        /// Unicast Listener
+        /// </summary>
+        private readonly IMyUnicastListener unicastListener;
+
+        /// <summary>
         /// Creates a new instance of the Airlock Control Program.
         /// </summary>
         public Program()
         {
             this.Commands["cycle"] = this.Cycle;
             this.Commands["cancel"] = this.Cancel;
+            this.Commands["release"] = this.Release;
 
             if (this.ini.TryParse(this.Me.CustomData))
             {
@@ -76,7 +132,33 @@
                     }
                 }
 
-                
+                string statusControllerName = this.ini.Get("output", "sReceiverName").ToString("");
+
+                if (!string.IsNullOrEmpty(statusControllerName))
+                {
+                    IMyTerminalBlock controller = this.GridTerminalSystem.GetBlockWithName(statusControllerName);
+
+                    if (controller != null)
+                    {
+                        this.outputControllerId = controller.EntityId;
+                    }
+                    else
+                    {
+                        this.Echo($"No Controller named {statusControllerName}. Ignoring...");
+                    }
+                }
+
+                this.outputControllerMessageTag = this.ini.Get("output", "sTag").ToString(AirlockStatusMessage.MessageTag);
+                this.transmissionDistance = (TransmissionDistance)Enum.Parse(typeof(TransmissionDistance), this.ini.Get("output", "sTransmissionDistance").ToString("CurrentConstruct"));
+
+                this.sendBroadcastMessage = !this.outputControllerId.HasValue || this.ini.Get("output", "bForceBroadcast").ToBoolean(false);
+
+                this.AllowExternalCommands = this.ini.Get("input", "bAllowExternalCommands").ToBoolean(true);
+                this.ExternalCommandTag = this.ini.Get("input", "sExternalCommandTag").ToString(AirlockCommandMessage.CommandTag);
+
+                this.broadcastListener = this.IGC.RegisterBroadcastListener(this.ExternalCommandTag);
+                this.unicastListener = this.IGC.UnicastListener;
+
                 this.Echo("Initialization Success.");
                 this.Echo($"Connected Airlocks: {this.Airlocks.Count}");
                 
@@ -104,6 +186,33 @@
                 foreach(Airlock airlock in this.Airlocks.Values)
                 {
                     airlock.Check();
+                }
+            }
+            else if ((updateSource & UpdateType.Update100) > 0)
+            {
+                this.SendStatusUpdate();
+            }
+            else if ((updateSource & UpdateType.IGC) > 0)
+            {
+                if (this.AllowExternalCommands)
+                {
+                    // TODO: Convert into a Coroutine, check for duplicate or conflicting messages etc
+                    while (this.broadcastListener.HasPendingMessage)
+                    {
+                        MyIGCMessage message = this.broadcastListener.AcceptMessage();
+                        AirlockCommandMessage commandMessage = AirlockCommandMessage.FromMessage(message);
+                        this.Main($"{commandMessage.Command} \"{commandMessage.Name}\" {commandMessage.Arguments}", UpdateType.None);
+                    }
+
+                    while (this.unicastListener.HasPendingMessage)
+                    {
+                        MyIGCMessage message = this.unicastListener.AcceptMessage();
+                        if (message.Tag == this.ExternalCommandTag)
+                        {
+                            AirlockCommandMessage commandMessage = AirlockCommandMessage.FromMessage(message);
+                            this.Main($"{commandMessage.Command} \"{commandMessage.Name}\" {commandMessage.Arguments}", UpdateType.None);
+                        }
+                    }
                 }
             }
             else if (this.CommandLine.TryParse(argument))
@@ -145,6 +254,31 @@
         }
 
         /// <summary>
+        /// Triggers the force open of the airlock
+        /// </summary>
+        private void Release()
+        {
+            string airlockName = this.CommandLine.Argument(1);
+            Airlock airlock;
+            if (this.Airlocks.TryGetValue(airlockName, out airlock))
+            {
+                if (this.CommandLine.Switch("interior"))
+                {
+                    airlock.ForceOpenInterior();
+                }
+                else if (this.CommandLine.Switch("exterior"))
+                {
+                    airlock.ForceOpenExterior();
+                }
+                else
+                {
+                    airlock.ForceOpenExterior();
+                    airlock.ForceOpenInterior();
+                }
+            }
+        }
+
+        /// <summary>
         /// Cancels cycling the airlock with the group name in the second argument.
         /// </summary>
         private void Cancel()
@@ -154,6 +288,28 @@
             if (this.Airlocks.TryGetValue(airlockName, out airlock))
             {
                 airlock.Cancel();
+            }
+        }
+
+        /// <summary>
+        /// Sends the status update for the airlocks.
+        /// </summary>
+        private void SendStatusUpdate()
+        {
+            this.airlockStatusMessages.Clear();
+            foreach (Airlock airlock in this.Airlocks.Values)
+            {
+                this.airlockStatusMessages.Add(airlock.GetStatusMessage());
+            }
+
+            if (this.outputControllerId.HasValue)
+            {
+                this.IGC.SendUnicastMessage(this.outputControllerId.Value, this.outputControllerMessageTag, ImmutableArray.CreateRange(this.airlockStatusMessages.Select(x => x.ToData())));
+            }
+            
+            if (this.sendBroadcastMessage)
+            {
+                this.IGC.SendBroadcastMessage(this.outputControllerMessageTag, ImmutableArray.CreateRange(this.airlockStatusMessages.Select(x => x.ToData())), this.transmissionDistance);
             }
         }
     }

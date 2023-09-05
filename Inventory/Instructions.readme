@@ -1,71 +1,17 @@
-﻿R e a d m e  1.0.0.000000001
+﻿R e a d m e  1.0.0
 -----------
 
-Setup:
-Add this script to your programmable block. Set the Custom Data on the programmable block and on the display blocks.
+For more information see: https://github.com/ztrank/se-script-library/wiki/Inventory
 
-Programmable Block CustomData
---------
-Section: [inventory]
-Required Data:
-  sReferenceName: (String) Name of the inventory block to act as the reference point for connected inventory. Must be an inventory block.
+Basic Setup:
 
-Optional Data:
-  iReferenceInventoryIndex: (Int) (Default=0) Index of the inventory in the reference block. This is to support multiple inventory blocks as reference blocks.
-  bDisconnectedCargo: (bool)(Default=false) Should inventory counts from connected ships be included
-  bDisconnectedOxygen: (bool)(Default=false) Should oxygen counts from connected ships be included
-  bDisconnectedHydrogen: (bool)(Default=false) Should hydrogen counts from connected ships be included
-  bDisconnectedReactor: (bool)(Default=false) Should reactor inventories from connected ships be included
-  rgDisplays: (String[])(Default=[]) Array of displays to use for showing the levels
-  fCargoMinWarn: (decimal)(Default=-1) Level which will trigger the warn color for minimum cargo levels
-  fCargoMinError: (decimal)(Default=-1) Level which will trigger the Error color for minimum cargo levels
-  fCargoMaxWarn: (decimal)(Default=.90) Level which will trigger the warn color for maximum cargo levels
-  fCargoMaxError: (decimal)(Default=.95) Level which will trigger the Error color for maximum cargo levels
-  fOxygenMinWarn: (decimal)(Default=.2) Level which will trigger the warn color for minimum oxygen levels
-  fOxygenMinError: (decimal)(Default=.1) Level which will trigger the Error color for minimum oxygen levels
-  fOxygenMaxWarn: (decimal)(Default=2) Level which will trigger the warn color for maximum oxygen levels
-  fOxygenMaxError: (decimal)(Default=2) Level which will trigger the Error color for maximum oxygen levels
-  fHydrogenMinWarn: (decimal)(Default=.2) Level which will trigger the warn color for minimum hydrogen levels
-  fHydrogenMinError: (decimal)(Default=.1) Level which will trigger the Error color for minimum hydrogen levels
-  fHydrogenMaxWarn: (decimal)(Default=2) Level which will trigger the warn color for maximum hydrogen levels
-  fHydrogenMaxError: (decimal)(Default=2) Level which will trigger the Error color for maximum hydrogen levels
-  fReactorsMinWarn: (decimal)(Default=.2) Level which will trigger the warn color for minimum reactor levels
-  fReactorsMinError: (decimal)(Default=.1) Level which will trigger the Error color for minimum reactor levels
-  fReactorsMaxWarn: (decimal)(Default=2) Level which will trigger the warn color for maximum reactor levels
-  fReactorsMaxError: (decimal)(Default=2) Level which will trigger the Error color for maximum reactor levels
+1. Load this script into a programmable block on a ship.
+2. Decide which inventory block to use as the "reference" inventory to find all connected inventories.
+3. (Optional) Decide which screens will be used to display the inventory levels
+4. Set the programmable block's CustomData.
 
 Example:
+
 [inventory]
-sReferenceName="Inventory Block Name"
-rgDisplays=["Inventory HUD"]
-iReferenceInventoryIndex=0
-
-Dispaly Block CustomData (Optional)
---------
-The Sections each require the index number of the display to have settings for, allowing a single block with multiple displays to have different data for each. Replace {index} with the number index of your display.
-
-Section: [display-{index}]
-
-Optional:
-  oxygen: (Bool)(Default=true) Displays oxygen levels
-  hydrogen: (Bool)(Default=true) Displays Hydrogen Levels
-  cargo: (Bool)(Default=true) Displays Cargo Levels
-  reactors: (Bool)(Default=true) Displays reactor levels
-
-Section: [display-{index}-colors]
-
-Optional:
-  background: (Vector3 or Vector4) Background color for the display
-  warn: (Vector3 or Vector4) Warn Color
-  error: (Vector3 or Vector4) Error Color
-  texture: (Vector3 or Vector4) Texture Color
-  border: (Vector3 or Vector4) Border Color
-  bar: (Vector3 or Vector4) Bar Color
-
-Section: [display-{index}-icons]
-
-Optional:
-  oxygen: (String) Path or name of texture for oxygen symbol
-  hydrogen: (String) Path or name of texture for hydrogen symbol
-  cargo: (String) Path or name of texture for cargo symbol
-  reactor: (String) Path or name of texture for reactor symbol
+sReferenceName="Inventory Block Name from Step 2"
+rgDisplays=["Screen Name from Step 3"]

@@ -52,32 +52,6 @@
             }
 
             /// <summary>
-            /// Airlock state.
-            /// </summary>
-            public enum AirlockState
-            {
-                /// <summary>
-                /// Airlock is pressurized.
-                /// </summary>
-                Pressurized,
-
-                /// <summary>
-                /// Airlock is in the process of pressurizing.
-                /// </summary>
-                Pressurizing,
-
-                /// <summary>
-                /// Airlock is in the process of depressurizing.
-                /// </summary>
-                Depressurizing,
-
-                /// <summary>
-                /// Airlock is depressurized.
-                /// </summary>
-                Depressurized
-            }
-
-            /// <summary>
             /// List of all doors.
             /// </summary>
             private readonly List<IMyDoor> AllDoors = new List<IMyDoor>();
@@ -628,6 +602,48 @@
             {
                 this.Echo("Depressurizing...");
                 this.Perform(this.AirVents, vent => vent.Depressurize = true);
+            }
+
+            /// <summary>
+            /// Opens the exterior doors without cycling
+            /// </summary>
+            public void ForceOpenExterior()
+            {
+                this.Echo("Manual Release of Exterior Doors...");
+                this.TurnLightsRed(this.AllLights);
+                this.Perform(this.InteriorDoors, door => door.Enabled = false);
+                this.UnlockExteriorDoors();
+                this.OpenExteriorDoors();
+            }
+
+            /// <summary>
+            /// Opens the interior doors without cycling
+            /// </summary>
+            public void ForceOpenInterior()
+            {
+                this.Echo("Manual Release of Interior Doors...");
+                this.TurnLightsRed(this.AllLights);
+                this.Perform(this.ExteriorDoors, door => door.Enabled = false);
+                this.UnlockInteriorDoors();
+                this.OpenInteriorDoors();
+            }
+
+            /// <summary>
+            /// Gets the status message of this airlock's current status.
+            /// </summary>
+            /// <returns>Airlock Status Message</returns>
+            public AirlockStatusMessage GetStatusMessage()
+            {
+                return new AirlockStatusMessage()
+                {
+                    Name = this.Name,
+                    Status = this.State,
+                    OxygenRatio = this.Oxygen.FillRatio,
+                    InteriorDoorsOpen = this.InteriorDoorsOpen,
+                    InteriorDoorsLocked = !this.InteriorDoorsUnlocked,
+                    ExteriorDoorsOpen = this.ExteriorDoorsOpen,
+                    ExteriorDoorsLocked = !this.ExteriorDoorsUnlocked
+                };
             }
 
             /// <summary>

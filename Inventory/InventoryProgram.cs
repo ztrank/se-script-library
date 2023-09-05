@@ -57,7 +57,8 @@
             if (this.ini.TryParse(this.Me.CustomData))
             {
                 this.ship = new Ship(this, this.ini)
-                    .With(new DockingSubSystem());
+                    .With(new DockingSubSystem())
+                    .Initialize();
 
                 this.ProgramName = "Inventory";
                 this.Commands["empty"] = this.Empty;
